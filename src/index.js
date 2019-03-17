@@ -9,6 +9,9 @@
 // - 9:5 Greater just minor seventh
 // - 2:1 Octave
 //
+// Tools:
+// - VexFlow https://github.com/0xfe/vexflow
+//
 // References:
 // - https://stackoverflow.com/a/34709510/638546
 // - https://en.wikipedia.org/wiki/List_of_pitch_intervals
