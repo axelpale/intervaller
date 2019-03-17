@@ -10,7 +10,8 @@
 // - 2:1 Octave
 //
 // Tools:
-// - VexFlow https://github.com/0xfe/vexflow
+// - VexFlow for musical notation https://github.com/0xfe/vexflow
+// - Tone.js for synths https://tonejs.github.io/
 //
 // References:
 // - https://stackoverflow.com/a/34709510/638546
