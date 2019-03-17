@@ -16,9 +16,18 @@ function playSound (context, arr) {
     source.start(0);
 }
 
-function sineWaveAt (sampleRate, sampleNumber, tone) {
-    var sampleFreq = sampleRate / tone
-    return Math.sin(sampleNumber / (sampleFreq / (Math.PI*2)))
+function sineWave (sampleRate, sampleNumber, tone) {
+  // Return sine wave value at sampleNumber
+  var sampleFreq = sampleRate / tone
+  return Math.sin(sampleNumber / (sampleFreq / (Math.PI*2)))
+}
+
+function generate (sampleRate, seconds, tone, volume, waveFn) {
+  var arr = []
+  for (var i = 0; i < sampleRate * seconds; i++) {
+    arr[i] = waveFn(sampleRate, i, tone) * volume
+  }
+  return arr
 }
 
 function createButton (id, handler) {
@@ -30,11 +39,9 @@ function createButton (id, handler) {
 var playButton = createButton('play', () => {
   var context = new AudioContext()
 
-  var arr = [], volume = 0.2, seconds = 0.5, tone = 441
+  var volume = 0.2, seconds = 0.5, tone = 441
 
-  for (var i = 0; i < context.sampleRate * seconds; i++) {
-      arr[i] = sineWaveAt(context.sampleRate, i, tone) * volume
-  }
+  var arr = generate(context.sampleRate, seconds, tone, volume, sineWave)
 
   playSound(context, arr)
 })
