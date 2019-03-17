@@ -40,6 +40,10 @@ function multiply (arr, multiplier) {
   return arr.map(x => x * multiplier)
 }
 
+function compose (arr1, arr2) {
+  return arr1.concat(arr2)
+}
+
 function createButton (id, handler) {
   var btn = document.getElementById(id)
   btn.addEventListener('click', handler)
