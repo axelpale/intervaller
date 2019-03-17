@@ -59,12 +59,6 @@ function compose () {
   return Array.prototype.concat.apply([], arguments)
 }
 
-function createButton (id, handler) {
-  var btn = document.getElementById(id)
-  btn.addEventListener('click', handler)
-  return btn
-}
-
 function generateFromScore (sampleRate, beatDuration, waveFn, score) {
   var i, j, beat, hz
   var song = []
@@ -81,7 +75,24 @@ function generateFromScore (sampleRate, beatDuration, waveFn, score) {
   return song
 }
 
-var playButton = createButton('play', () => {
+function createButton (id, handler) {
+  var btn = document.getElementById(id)
+  btn.addEventListener('click', handler)
+  return btn
+}
+
+function createSongButton (id, scoreFn) {
+  return createButton(id, () => {
+    var score = scoreFn()
+    var bpm = 160
+    var beat = 60 / bpm // seconds
+    var context = new AudioContext()
+    var song = generateFromScore(context.sampleRate, beat, sineWave, score)
+    playSound(context, song)
+  })
+}
+
+var playButton = createSongButton('play', () => {
   var m3 = 6 / 5 // Just minor third
   var M3 = 5 / 4
   var P4 = 4 / 3 // Perfect fourth
@@ -94,12 +105,12 @@ var playButton = createButton('play', () => {
   var hz08 = hz03 * P4
   var hz10 = hz03 * P5
 
-  var score = [
+  return [
     [hz00, hz07],
     [hz00, hz05],
     [],
     [hz00, hz05],
-    [hz00, hz05],
+    [],
     [hz00, hz05],
     [],
     [],
@@ -107,15 +118,38 @@ var playButton = createButton('play', () => {
     [hz03, hz08],
     [],
     [hz03, hz08],
-    [hz03, hz08],
+    [],
     [hz03, hz08],
     [],
     []
   ]
+})
 
-  var bpm = 160
-  var beatDuration = 60 / bpm // seconds
-  var context = new AudioContext()
-  song = generateFromScore(context.sampleRate, beatDuration, sineWave, score)
-  playSound(context, song)
+var equalButton = createSongButton('equal', () => {
+  // Equal temperament, 12-TET
+  var hz00 = 432 // Verdi A
+  var hz03 = hz00 * 1.189207
+  var hz05 = hz00 * 1.334840
+  var hz07 = hz00 * 1.498307
+  var hz08 = hz00 * 1.587401
+  var hz10 = hz00 * 1.781797
+
+  return [
+    [hz00, hz07],
+    [hz00, hz05],
+    [],
+    [hz00, hz05],
+    [],
+    [hz00, hz05],
+    [],
+    [],
+    [hz03, hz10],
+    [hz03, hz08],
+    [],
+    [hz03, hz08],
+    [],
+    [hz03, hz08],
+    [],
+    []
+  ]
 })
