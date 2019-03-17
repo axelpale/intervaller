@@ -1,6 +1,11 @@
+//
+// References:
+// - https://stackoverflow.com/a/34709510/638546
+//
+
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
-function playSound(context, arr) {
+function playSound (context, arr) {
     var buf = new Float32Array(arr.length)
     for (var i = 0; i < arr.length; i++) buf[i] = arr[i]
     var buffer = context.createBuffer(1, buf.length, context.sampleRate)
@@ -11,21 +16,24 @@ function playSound(context, arr) {
     source.start(0);
 }
 
-var playButton = document.getElementById('play')
+function sineWaveAt (sampleRate, sampleNumber, tone) {
+    var sampleFreq = sampleRate / tone
+    return Math.sin(sampleNumber / (sampleFreq / (Math.PI*2)))
+}
 
-playButton.addEventListener('click', (ev) => {
+function createButton (id, handler) {
+  var btn = document.getElementById(id)
+  btn.addEventListener('click', handler)
+  return btn
+}
 
-  var context = new AudioContext();
-
-  function sineWaveAt(sampleNumber, tone) {
-      var sampleFreq = context.sampleRate / tone
-      return Math.sin(sampleNumber / (sampleFreq / (Math.PI*2)))
-  }
+var playButton = createButton('play', () => {
+  var context = new AudioContext()
 
   var arr = [], volume = 0.2, seconds = 0.5, tone = 441
 
   for (var i = 0; i < context.sampleRate * seconds; i++) {
-      arr[i] = sineWaveAt(i, tone) * volume
+      arr[i] = sineWaveAt(context.sampleRate, i, tone) * volume
   }
 
   playSound(context, arr)
