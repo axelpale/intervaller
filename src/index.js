@@ -69,13 +69,17 @@ var playButton = createButton('play', () => {
   var vol = 0.2
   var halfSec = 0.5
 
-  var verdiA = 432
-  var fifth = verdiA * 3 / 2
+  var verdiAHz = 432
+  var fifthHz = verdiAHz * 3 / 2
+  var fourthHz = verdiAHz * 4 / 3
 
-  var a = generate(context.sampleRate, halfSec, verdiA, vol, sineWave)
-  var b = generate(context.sampleRate, halfSec, fifth, vol, sineWave)
+  var base = generate(context.sampleRate, halfSec, verdiAHz, vol, sineWave)
+  var s1 = generate(context.sampleRate, halfSec, fifthHz, vol, sineWave)
+  var fifth = add(base, s1)
 
-  var c = add(a, b)
+  var s2 = generate(context.sampleRate, halfSec, fourthHz, vol, sineWave)
+  var fourth = add(base, s2)
 
+  var c = compose(fifth, fourth)
   playSound(context, c)
 })
