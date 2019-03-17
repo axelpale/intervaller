@@ -65,23 +65,57 @@ function createButton (id, handler) {
   return btn
 }
 
+function generateFromScore (sampleRate, beatDuration, waveFn, score) {
+  var i, j, beat, hz
+  var song = []
+  for (i = 0; i < score.length; i += 1) {
+    beat = score[i]
+    chord = generate(sampleRate, beatDuration, 0, 0, waveFn)
+    for (j = 0; j < beat.length; j += 1) {
+      hz = beat[j]
+      hzs = generate(sampleRate, beatDuration, hz, 0.4, waveFn)
+      chord = add(chord, hzs)
+    }
+    song = compose(song, chord)
+  }
+  return song
+}
+
 var playButton = createButton('play', () => {
+  var m3 = 6 / 5 // Just minor third
+  var M3 = 5 / 4
+  var P4 = 4 / 3 // Perfect fourth
+  var P5 = 3 / 2 // Perfect fifth
+
+  var hz00 = 432 // Verdi A
+  var hz03 = hz00 * m3
+  var hz05 = hz00 * P4
+  var hz07 = hz00 * P5
+  var hz08 = hz03 * P4
+  var hz10 = hz03 * P5
+
+  var score = [
+    [hz00, hz07],
+    [hz00, hz05],
+    [],
+    [hz00, hz05],
+    [hz00, hz05],
+    [hz00, hz05],
+    [],
+    [],
+    [hz03, hz10],
+    [hz03, hz08],
+    [],
+    [hz03, hz08],
+    [hz03, hz08],
+    [hz03, hz08],
+    [],
+    []
+  ]
+
+  var bpm = 160
+  var beatDuration = 60 / bpm // seconds
   var context = new AudioContext()
-
-  var vol = 0.2
-  var halfSec = 0.5
-
-  var verdiAHz = 432
-  var fifthHz = verdiAHz * 3 / 2
-  var fourthHz = verdiAHz * 4 / 3
-
-  var base = generate(context.sampleRate, halfSec, verdiAHz, vol, sineWave)
-  var s1 = generate(context.sampleRate, halfSec, fifthHz, vol, sineWave)
-  var fifth = add(base, s1)
-
-  var s2 = generate(context.sampleRate, halfSec, fourthHz, vol, sineWave)
-  var fourth = add(base, s2)
-
-  var c = compose(fifth, fourth)
-  playSound(context, c)
+  song = generateFromScore(context.sampleRate, beatDuration, sineWave, score)
+  playSound(context, song)
 })
