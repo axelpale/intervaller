@@ -59,6 +59,13 @@ function compose () {
   return Array.prototype.concat.apply([], arguments)
 }
 
+function linearDecay (arr) {
+  var len = arr.length
+  return arr.map((x, i) => {
+    return x * (len - i) / len
+  })
+}
+
 function generateFromScore (sampleRate, beatDuration, waveFn, score) {
   var i, j, beat, hz
   var song = []
@@ -68,7 +75,8 @@ function generateFromScore (sampleRate, beatDuration, waveFn, score) {
     for (j = 0; j < beat.length; j += 1) {
       hz = beat[j]
       hzs = generate(sampleRate, beatDuration, hz, 0.4, waveFn)
-      chord = add(chord, hzs)
+      decayed = linearDecay(hzs)
+      chord = add(chord, decayed)
     }
     song = compose(song, chord)
   }
