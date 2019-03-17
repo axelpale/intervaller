@@ -1,0 +1,2 @@
+# intervaller
+Generate pythagorean intervals
