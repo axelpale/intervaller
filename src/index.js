@@ -54,8 +54,8 @@ function multiply (arr, multiplier) {
   return arr.map(x => x * multiplier)
 }
 
-function compose (arr1, arr2) {
-  return arr1.concat(arr2)
+function compose () {
+  return Array.prototype.concat.apply([], arguments)
 }
 
 function createButton (id, handler) {
