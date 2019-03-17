@@ -1,7 +1,17 @@
 //
+// Intervals:
+// - 5:4 Just major third
+// - 4:3 Perfect fourth
+// - 3:2 Perfect fifth
+// - 8:5 Just minor sixth
+// - 5:3 Just major sixth
+// - 16:9 Pythagorean minor seventh
+// - 9:5 Greater just minor seventh
+// - 2:1 Octave
+//
 // References:
 // - https://stackoverflow.com/a/34709510/638546
-//
+// - https://en.wikipedia.org/wiki/List_of_pitch_intervals
 
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
