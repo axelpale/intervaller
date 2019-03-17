@@ -49,9 +49,16 @@ function createButton (id, handler) {
 var playButton = createButton('play', () => {
   var context = new AudioContext()
 
-  var volume = 0.2, seconds = 0.5, tone = 441
+  var vol = 0.2
+  var halfSec = 0.5
 
-  var arr = generate(context.sampleRate, seconds, tone, volume, sineWave)
+  var verdiA = 432
+  var fifth = verdiA * 3 / 2
 
-  playSound(context, arr)
+  var a = generate(context.sampleRate, halfSec, verdiA, vol, sineWave)
+  var b = generate(context.sampleRate, halfSec, fifth, vol, sineWave)
+
+  var c = add(a, b)
+
+  playSound(context, c)
 })
