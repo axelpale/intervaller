@@ -30,6 +30,16 @@ function generate (sampleRate, seconds, tone, volume, waveFn) {
   return arr
 }
 
+function add (arr1, arr2) {
+  return arr1.map((x, i) => {
+    return x + arr2[i]
+  })
+}
+
+function multiply (arr, multiplier) {
+  return arr.map(x => x * multiplier)
+}
+
 function createButton (id, handler) {
   var btn = document.getElementById(id)
   btn.addEventListener('click', handler)
