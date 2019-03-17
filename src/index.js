@@ -1,5 +1,6 @@
 //
 // Intervals:
+// - 6:5 Just minor third
 // - 5:4 Just major third
 // - 4:3 Perfect fourth
 // - 3:2 Perfect fifth
