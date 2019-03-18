@@ -100,13 +100,69 @@ function createSongButton (id, scoreFn) {
   })
 }
 
+function drawScore () {
+  const VF = Vex.Flow;
+
+  var div = document.getElementById('score');
+  var renderer = new VF.Renderer(div, VF.Renderer.Backends.SVG);
+
+  renderer.resize(900, 150);
+  var context = renderer.getContext();
+
+  var stave = new VF.Stave(10, 10, 400);
+  stave.addClef('treble').addTimeSignature('4/4');
+
+  stave.setContext(context).draw();
+
+  // '(C4 G4)/8, (C4 F4)/q, (C4 F4)/q, (C4 F4)/q.'
+
+  var notes = [
+    new VF.StaveNote({clef: "treble", keys: ["c/4", "g/4"], duration: "8" }),
+    new VF.StaveNote({clef: "treble", keys: ["c/4", "f/4"], duration: "q" }),
+    new VF.StaveNote({clef: "treble", keys: ["c/4", "f/4"], duration: "q" }),
+    new VF.StaveNote({clef: "treble", keys: ["c/4", "f/4"], duration: "qd" }).
+      addDotToAll()
+  ];
+
+  var voice = new VF.Voice({num_beats:4, beat_value: 4});
+  voice.addTickables(notes);
+
+  var formatter = new VF.Formatter().joinVoices([voice]).format([voice], 400);
+  voice.draw(context, stave);
+
+  var stave2 = new VF.Stave(410, 10, 400);
+  stave2.setContext(context).draw();
+
+  var notes2 = [
+    new VF.StaveNote({clef: "treble", keys: ["d#/4", "a#/4"], duration: "8" })
+      .addAccidental(0, new VF.Accidental('#'))
+      .addAccidental(1, new VF.Accidental('#')),
+    new VF.StaveNote({clef: "treble", keys: ["d#/4", "g#/4"], duration: "q" })
+      .addAccidental(0, new VF.Accidental('#'))
+      .addAccidental(1, new VF.Accidental('#')),
+    new VF.StaveNote({clef: "treble", keys: ["d#/4", "g#/4"], duration: "q" })
+      .addAccidental(0, new VF.Accidental('#'))
+      .addAccidental(1, new VF.Accidental('#')),
+    new VF.StaveNote({clef: "treble", keys: ["d#/4", "g#/4"], duration: "qd" })
+      .addAccidental(0, new VF.Accidental('#'))
+      .addAccidental(1, new VF.Accidental('#'))
+      .addDotToAll()
+  ];
+
+  var voice2 = new VF.Voice({num_beats: 4, beat_value: 4});
+  voice2.addTickables(notes2);
+  var formatter2 = new VF.Formatter().joinVoices([voice2]).format([voice2], 400);
+  voice2.draw(context, stave2);
+}
+drawScore()
+
 var playButton = createSongButton('play', () => {
   var m3 = 6 / 5 // Just minor third
   var M3 = 5 / 4
   var P4 = 4 / 3 // Perfect fourth
   var P5 = 3 / 2 // Perfect fifth
 
-  var hz00 = 432 // Verdi A
+  var hz00 = 441 // 432 // Verdi A
   var hz03 = hz00 * m3
   var hz05 = hz00 * P4
   var hz07 = hz00 * P5
@@ -135,7 +191,7 @@ var playButton = createSongButton('play', () => {
 
 var equalButton = createSongButton('equal', () => {
   // Equal temperament, 12-TET
-  var hz00 = 432 // Verdi A
+  var hz00 = 441 // 432 // Verdi A
   var hz03 = hz00 * 1.189207
   var hz05 = hz00 * 1.334840
   var hz07 = hz00 * 1.498307
