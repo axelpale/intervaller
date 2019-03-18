@@ -15,16 +15,18 @@
 // - Tone.js for synths https://tonejs.github.io/
 //
 // References:
+// - https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext
+//   /createBuffer#Examples
 // - https://stackoverflow.com/a/34709510/638546
 // - https://en.wikipedia.org/wiki/List_of_pitch_intervals
+//
 
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
 function playSound (context, arr) {
-  var buf = new Float32Array(arr.length)
-  for (var i = 0; i < arr.length; i++) buf[i] = arr[i]
-  var buffer = context.createBuffer(1, buf.length, context.sampleRate)
-  buffer.copyToChannel(buf, 0)
+  var buffer = context.createBuffer(1, arr.length, context.sampleRate)
+  var chan = buffer.getChannelData(0)
+  for (var i = 0; i < arr.length; i++) chan[i] = arr[i]
   var source = context.createBufferSource()
   source.buffer = buffer
   source.connect(context.destination)
